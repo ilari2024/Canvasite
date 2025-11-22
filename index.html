@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satunnainen Nappi</title>
+    <title>Jatkuvasti Liikkuva Nappi</title>
     <style>
         /* Asettaa koko sivun valkoiseksi */
         body {
@@ -12,24 +12,24 @@
             padding: 0;
             height: 100vh;
             width: 100vw;
-            overflow: hidden; /* Estää vierityspalkit, jos nappi menee reunalle */
-            position: relative; /* Tarvitaan napin absoluuttista sijoittelua varten */
+            overflow: hidden; 
+            position: relative; 
+            /* Estää tekstin valinnan ja varmistaa paremman toiminnan */
+            user-select: none; 
         }
 
         /* Napin perusmuotoilu ja sijoittelu */
         #liikkuvaNappi {
-            position: absolute; /* Mahdollistaa vapaan sijoittelun 'body'-elementin sisällä */
+            position: absolute; 
             padding: 15px 30px;
             font-size: 20px;
             cursor: pointer;
             border: 2px solid #333;
             background-color: #f0f0f0;
             border-radius: 8px;
-            transition: transform 0.1s; /* Pieni animaatio painallukselle */
-        }
-
-        #liikkuvaNappi:active {
-            transform: scale(0.98); /* Nappi painuu kasaan painettaessa */
+            /* Lisätään pieni siirtymä, jotta liike näyttää pehmeämmältä */
+            transition: top 0.5s ease-out, left 0.5s ease-out; 
+            z-index: 10; /* Varmistaa, että nappi on päällimmäisenä */
         }
     </style>
 </head>
@@ -40,27 +40,42 @@
     </button>
 
     <script>
-        // JavaScript, joka sijoittaa napin satunnaiseen paikkaan sivun latautuessa
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const nappi = document.getElementById('liikkuvaNappi');
-            
-            // Haetaan näytön leveys ja korkeus
+        const nappi = document.getElementById('liikkuvaNappi');
+        
+        /**
+         * Funktio, joka laskee ja asettaa napille uuden satunnaisen sijainnin.
+         */
+        function siirraNappiaSatunnaisesti() {
+            // Haetaan näytön dynaamiset mitat
             const sivuLeveys = window.innerWidth;
             const sivuKorkeus = window.innerHeight;
             
-            // Haetaan napin leveys ja korkeus (tarvitaan, jotta nappi pysyy näytöllä)
+            // Haetaan napin dynaamiset mitat
             const napinLeveys = nappi.offsetWidth;
             const napinKorkeus = nappi.offsetHeight;
 
-            // Lasketaan satunnainen sijainti, varmistetaan että nappi pysyy ruudulla
-            // (sivun koko - napin koko) * satunnainen luku välillä 0-1
+            // Lasketaan satunnainen sijainti, varmistetaan että nappi pysyy näytöllä
+            // (Maksimi X/Y - Nappulan leveys/korkeus) * satunnainen luku välillä 0-1
             const satunnainenX = Math.random() * (sivuLeveys - napinLeveys);
             const satunnainenY = Math.random() * (sivuKorkeus - napinKorkeus);
 
-            // Asetetaan napin uusi sijainti
+            // Asetetaan napin uusi sijainti CSS-tyylien avulla
             nappi.style.left = satunnainenX + 'px';
             nappi.style.top = satunnainenY + 'px';
-        });
+        }
+
+        // 1. Asetetaan napin ensimmäinen sijainti heti sivun latauduttua
+        window.onload = function() {
+            siirraNappiaSatunnaisesti();
+        };
+
+        // 2. Asetetaan ajastin, joka kutsuu funktiota 700 millisekunnin (0.7 sekunnin) välein.
+        // Voit muuttaa tätä arvoa tehdäksesi liikkeestä hitaampaa tai nopeampaa.
+        setInterval(siirraNappiaSatunnaisesti, 700);
+        
+        // 3. Varmistetaan, että sijainti päivittyy myös näytön koon muuttuessa (esim. puhelimella kääntäessä)
+        window.addEventListener('resize', siirraNappiaSatunnaisesti);
+
     </script>
 
 </body>
