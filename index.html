@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satunnainen Nappi</title>
+    <style>
+        /* Asettaa koko sivun valkoiseksi */
+        body {
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Estää vierityspalkit, jos nappi menee reunalle */
+            position: relative; /* Tarvitaan napin absoluuttista sijoittelua varten */
+        }
+
+        /* Napin perusmuotoilu ja sijoittelu */
+        #liikkuvaNappi {
+            position: absolute; /* Mahdollistaa vapaan sijoittelun 'body'-elementin sisällä */
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            border: 2px solid #333;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            transition: transform 0.1s; /* Pieni animaatio painallukselle */
+        }
+
+        #liikkuvaNappi:active {
+            transform: scale(0.98); /* Nappi painuu kasaan painettaessa */
+        }
+    </style>
+</head>
+<body>
+
+    <button id="liikkuvaNappi" onclick="window.location.href='https://hausku.my.canva.site/#page-c'">
+        Jatka
+    </button>
+
+    <script>
+        // JavaScript, joka sijoittaa napin satunnaiseen paikkaan sivun latautuessa
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const nappi = document.getElementById('liikkuvaNappi');
+            
+            // Haetaan näytön leveys ja korkeus
+            const sivuLeveys = window.innerWidth;
+            const sivuKorkeus = window.innerHeight;
+            
+            // Haetaan napin leveys ja korkeus (tarvitaan, jotta nappi pysyy näytöllä)
+            const napinLeveys = nappi.offsetWidth;
+            const napinKorkeus = nappi.offsetHeight;
+
+            // Lasketaan satunnainen sijainti, varmistetaan että nappi pysyy ruudulla
+            // (sivun koko - napin koko) * satunnainen luku välillä 0-1
+            const satunnainenX = Math.random() * (sivuLeveys - napinLeveys);
+            const satunnainenY = Math.random() * (sivuKorkeus - napinKorkeus);
+
+            // Asetetaan napin uusi sijainti
+            nappi.style.left = satunnainenX + 'px';
+            nappi.style.top = satunnainenY + 'px';
+        });
+    </script>
+
+</body>
+</html>
